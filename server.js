@@ -52,7 +52,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  if (pathname === "/" || pathname === "/index.html") {
+  if (pathname === "/" || pathname === "/index.html" || pathname === "") {
     serveHTML(res);
     return;
   }
@@ -80,8 +80,7 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  res.writeHead(404, { "Content-Type": "application/json" });
-  res.end(JSON.stringify({ error: "Not found" }));
+  serveHTML(res);
 });
 
 server.listen(PORT, () => {
