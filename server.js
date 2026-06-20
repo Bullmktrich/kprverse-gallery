@@ -2,7 +2,7 @@ const http = require("http");
 const https = require("https");
 const url = require("url");
 
-const PORT = process.env.PORT || 3000;
+const PORT = parseInt(process.env.PORT) || 10000;
 const OPENSEA_API_KEY = process.env.OPENSEA_API_KEY || "";
 
 function proxyToOpenSea(osPath, res) {
