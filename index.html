@@ -1,176 +1,227 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>KPRVERSE Gallery</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<title>KPRVERSE — Your Collection, Your Grid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #ffffff; --bg2: #f5f5f4; --bg3: #eeede9;
-    --text: #1a1a18; --text2: #6b6b67; --text3: #9e9e9a;
-    --border: rgba(0,0,0,0.1); --border2: rgba(0,0,0,0.18);
-    --accent: #6c47ff; --accent2: #5535d4;
-    --radius: 8px; --radius-lg: 12px;
+    --black: #000000;
+    --white: #ffffff;
+    --purple: #A79BED;
+    --purple-dim: rgba(167,155,237,0.15);
+    --purple-border: rgba(167,155,237,0.3);
+    --gray1: #111111;
+    --gray2: #1a1a1a;
+    --gray3: #2a2a2a;
+    --gray4: #3a3a3a;
+    --gray5: #666666;
+    --gray6: #999999;
+    --radius: 4px;
+    --radius-lg: 6px;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1a1a18; --bg2: #242422; --bg3: #2e2e2c;
-      --text: #f0efeb; --text2: #a0a09c; --text3: #6b6b67;
-      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.18);
-    }
+  html { background: var(--black); }
+  body {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--black);
+    color: var(--white);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
   }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-  .page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.25rem; }
-  .setup-wrap { max-width: 480px; margin: 4rem auto 0; }
-  .kpr-wordmark { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--text3); text-transform: uppercase; margin-bottom: 1.5rem; }
-  .setup-wrap h1 { font-size: 28px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
-  .setup-wrap p { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 2rem; }
-  .field { margin-bottom: 1rem; }
-  .field label { display: block; font-size: 12px; color: var(--text2); margin-bottom: 6px; }
-  .field input { width: 100%; padding: 10px 12px; font-size: 14px; font-family: monospace; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); transition: border-color 0.15s; }
-  .field input:focus { outline: none; border-color: var(--text); }
-  .btn-go { width: 100%; padding: 11px; font-size: 14px; font-weight: 600; background: var(--text); color: var(--bg); border: none; border-radius: var(--radius); cursor: pointer; margin-top: 4px; transition: opacity 0.15s; }
-  .btn-go:hover { opacity: 0.85; }
-  .btn-go:disabled { opacity: 0.4; cursor: default; }
-  .setup-note { font-size: 12px; color: var(--text3); margin-top: 12px; line-height: 1.5; }
-  .error-msg { color: #c0392b; font-size: 13px; margin-top: 10px; }
+  .grid-bg {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
+  .kpr-logo { display: block; height: 22px; width: auto; }
+  .kpr-logo path { fill: var(--white); }
+  .kpr-logo-wrap { margin-bottom: 3rem; }
+  .kpr-sub { font-size: 10px; letter-spacing: 0.15em; color: var(--gray5); text-transform: uppercase; margin-top: 6px; }
+  .setup-wrap { max-width: 460px; margin: 4rem auto 0; }
+  .setup-wrap h1 { font-size: 26px; font-weight: 600; color: var(--white); margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.2; }
+  .setup-wrap h1 span { color: var(--purple); }
+  .setup-wrap p { font-size: 13px; color: var(--gray6); line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); margin-bottom: 8px; }
+  .field input { width: 100%; padding: 12px 14px; font-size: 13px; font-family: 'IBM Plex Mono', monospace; background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--white); transition: border-color 0.15s; }
+  .field input::placeholder { color: var(--gray5); }
+  .field input:focus { outline: none; border-color: var(--purple); }
+  .btn-primary { width: 100%; padding: 13px; font-size: 13px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.05em; text-transform: uppercase; background: var(--white); color: var(--black); border: none; border-radius: var(--radius); cursor: pointer; margin-top: 4px; transition: background 0.15s, color 0.15s; }
+  .btn-primary:hover { background: var(--purple); color: var(--black); }
+  .btn-primary:disabled { opacity: 0.3; cursor: default; }
+  .setup-note { font-size: 11px; color: var(--gray5); margin-top: 14px; line-height: 1.6; }
+  .error-msg { color: #ff6b6b; font-size: 12px; margin-top: 10px; }
+  .rule { border: none; border-top: 1px solid var(--gray3); margin: 2rem 0; }
   #gallery { display: none; }
-  .gallery-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; }
-  .gallery-top h1 { font-size: 22px; font-weight: 600; color: var(--text); }
-  .wallet-chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-family: monospace; color: var(--text2); margin-top: 6px; }
-  .btn-back { padding: 8px 14px; font-size: 13px; background: transparent; border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); cursor: pointer; }
-  .btn-back:hover { background: var(--bg2); }
-  .stats-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .stat-box { background: var(--bg2); border-radius: var(--radius); padding: 12px 16px; min-width: 110px; }
-  .stat-box .s-l { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-  .stat-box .s-v { font-size: 20px; font-weight: 600; color: var(--text); }
-  .stat-box .s-v.small { font-size: 14px; }
-  .mode-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 1.25rem; padding: 10px 14px; background: var(--bg2); border-radius: var(--radius); flex-wrap: wrap; }
-  .mode-label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 4px; }
-  .mode-btn { padding: 6px 14px; font-size: 13px; border: 1px solid var(--border2); border-radius: var(--radius); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; }
-  .mode-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .selection-info { margin-left: auto; font-size: 13px; color: var(--text2); display: flex; align-items: center; gap: 10px; }
-  .selection-count { font-weight: 600; color: var(--accent); }
-  .btn-clear-sel { font-size: 12px; color: var(--text3); background: none; border: none; cursor: pointer; text-decoration: underline; }
-  .btn-clear-sel:hover { color: var(--text2); }
+  .gallery-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1.75rem; flex-wrap: wrap; }
+  .gallery-header-left h1 { font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+  .wallet-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: var(--gray2); border: 1px solid var(--gray3); border-radius: 2px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; color: var(--gray6); margin-top: 8px; }
+  .wallet-dot { width: 6px; height: 6px; background: var(--purple); border-radius: 50%; display: inline-block; }
+  .btn-ghost { padding: 8px 14px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; background: transparent; border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--gray6); cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+  .btn-ghost:hover { border-color: var(--gray5); color: var(--white); }
+  .stats-row { display: flex; gap: 2px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .stat-box { background: var(--gray1); border: 1px solid var(--gray3); padding: 12px 16px; flex: 1; min-width: 100px; }
+  .stat-box:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+  .stat-box:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+  .stat-box .s-l { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray5); margin-bottom: 6px; }
+  .stat-box .s-v { font-size: 22px; font-weight: 600; color: var(--white); }
+  .stat-box .s-v.accent { color: var(--purple); }
+  .mode-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .mode-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); margin-right: 4px; }
+  .mode-btn { padding: 6px 14px; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray3); border-radius: var(--radius); background: transparent; color: var(--gray5); cursor: pointer; transition: all 0.15s; }
+  .mode-btn:hover { border-color: var(--gray5); color: var(--white); }
+  .mode-btn.active { background: var(--white); color: var(--black); border-color: var(--white); }
+  .mode-btn.active.sel { background: var(--purple); border-color: var(--purple); color: var(--black); }
+  .selection-info { margin-left: auto; font-size: 11px; color: var(--gray6); display: flex; align-items: center; gap: 12px; }
+  .selection-count { font-weight: 600; color: var(--purple); }
+  .btn-clear { font-size: 11px; color: var(--gray5); background: none; border: none; cursor: pointer; text-decoration: underline; font-family: 'IBM Plex Mono', monospace; }
+  .btn-clear:hover { color: var(--white); }
   .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .toolbar input { flex: 1; min-width: 140px; max-width: 260px; padding: 8px 11px; font-size: 13px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); }
-  .toolbar input:focus { outline: none; border-color: var(--text); }
-  .toolbar select { padding: 8px 11px; font-size: 13px; background: var(--bg); border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); }
-  .col-btns { display: flex; gap: 4px; }
-  .col-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); border-radius: var(--radius); background: transparent; cursor: pointer; color: var(--text2); font-size: 9px; letter-spacing: -1px; }
-  .col-btn.on { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .count-lbl { font-size: 12px; color: var(--text3); margin-left: auto; }
-  .grid { display: grid; gap: 10px; }
+  .toolbar input { flex: 1; min-width: 140px; max-width: 240px; padding: 8px 12px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--white); }
+  .toolbar input::placeholder { color: var(--gray5); }
+  .toolbar input:focus { outline: none; border-color: var(--gray5); }
+  .toolbar select { padding: 8px 12px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--white); }
+  .col-btns { display: flex; gap: 3px; }
+  .col-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gray3); border-radius: var(--radius); background: transparent; cursor: pointer; color: var(--gray5); font-size: 8px; letter-spacing: -1px; font-family: 'IBM Plex Mono', monospace; }
+  .col-btn:hover { border-color: var(--gray5); color: var(--white); }
+  .col-btn.on { background: var(--white); color: var(--black); border-color: var(--white); }
+  .count-lbl { font-size: 11px; color: var(--gray5); margin-left: auto; }
+  .nft-grid { display: grid; gap: 3px; }
   .g2 { grid-template-columns: repeat(2, 1fr); }
   .g3 { grid-template-columns: repeat(3, 1fr); }
   .g4 { grid-template-columns: repeat(4, 1fr); }
   .g5 { grid-template-columns: repeat(5, 1fr); }
-  .nft-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; cursor: pointer; transition: border-color 0.12s, transform 0.12s; position: relative; }
-  .nft-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-  .nft-card.selected { border: 2px solid var(--accent); transform: translateY(-2px); }
+  .nft-card { background: var(--gray1); border: 1px solid var(--gray3); overflow: hidden; cursor: pointer; transition: border-color 0.12s; position: relative; }
+  .nft-card:hover { border-color: var(--gray5); }
+  .nft-card.selected { border-color: var(--purple); }
   .nft-card.selected .sel-badge { display: flex; }
-  .sel-badge { display: none; position: absolute; top: 7px; right: 7px; width: 22px; height: 22px; background: var(--accent); border-radius: 50%; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 700; z-index: 2; }
-  .sel-order { position: absolute; top: 7px; left: 7px; padding: 2px 7px; background: rgba(0,0,0,0.6); border-radius: 20px; font-size: 11px; color: white; font-weight: 600; display: none; z-index: 2; }
   .nft-card.selected .sel-order { display: block; }
-  .nft-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: var(--bg2); }
-  .nft-card .ph { width: 100%; aspect-ratio: 1; background: var(--bg2); display: flex; align-items: center; justify-content: center; color: var(--text3); font-size: 24px; }
-  .nft-card .ci { padding: 8px 10px; }
-  .nft-card .cn { font-size: 12px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .nft-card .cid { font-size: 11px; color: var(--text3); margin-top: 1px; }
-  .empty-state { grid-column: 1/-1; text-align: center; padding: 3rem 0; color: var(--text2); font-size: 14px; }
-  .load-more { text-align: center; margin-top: 1.25rem; }
-  .load-more button { padding: 9px 20px; font-size: 13px; background: transparent; border: 1px solid var(--border2); border-radius: var(--radius); color: var(--text); cursor: pointer; }
-  .load-more button:hover { background: var(--bg2); }
-  .export-panel { display: none; margin-top: 1.5rem; padding: 1.5rem; background: var(--bg2); border-radius: var(--radius-lg); border: 1px solid var(--border); }
+  .sel-badge { display: none; position: absolute; top: 7px; right: 7px; width: 20px; height: 20px; background: var(--purple); border-radius: 50%; align-items: center; justify-content: center; font-size: 11px; color: var(--black); font-weight: 700; z-index: 2; }
+  .sel-order { display: none; position: absolute; top: 7px; left: 7px; padding: 2px 6px; background: rgba(0,0,0,0.75); font-size: 10px; color: var(--white); font-weight: 600; z-index: 2; font-family: 'IBM Plex Mono', monospace; border-radius: 2px; }
+  .nft-card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: var(--gray2); }
+  .nft-card .ph { width: 100%; aspect-ratio: 1; background: var(--gray2); display: flex; align-items: center; justify-content: center; color: var(--gray4); font-size: 20px; }
+  .nft-card .ci { padding: 8px 10px; border-top: 1px solid var(--gray3); }
+  .nft-card .cn { font-size: 11px; font-weight: 500; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0.01em; }
+  .nft-card .cid { font-size: 10px; color: var(--gray5); margin-top: 2px; }
+  .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 0; color: var(--gray5); font-size: 13px; }
+  .load-more { text-align: center; margin-top: 1.5rem; }
+  .load-more button { padding: 9px 24px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; background: transparent; border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--gray6); cursor: pointer; }
+  .load-more button:hover { border-color: var(--gray5); color: var(--white); }
+  .export-panel { display: none; margin-top: 2rem; padding: 1.5rem; background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius-lg); }
   .export-panel.visible { display: block; }
-  .export-panel h2 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
-  .export-panel p { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
+  .export-panel h2 { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white); margin-bottom: 4px; }
+  .export-panel p { font-size: 12px; color: var(--gray5); margin-bottom: 1.5rem; font-weight: 300; }
   .export-options { display: flex; flex-direction: column; gap: 1.25rem; }
   .export-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .export-row label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; min-width: 80px; }
-  .grid-size-btns { display: flex; gap: 6px; flex-wrap: wrap; }
-  .gs-btn { padding: 6px 12px; font-size: 12px; font-weight: 600; border: 1px solid var(--border2); border-radius: var(--radius); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.12s; }
-  .gs-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .gs-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-  .format-btns { display: flex; gap: 6px; }
-  .fmt-btn { padding: 6px 14px; font-size: 12px; font-weight: 600; border: 1px solid var(--border2); border-radius: var(--radius); background: transparent; color: var(--text2); cursor: pointer; transition: all 0.12s; }
-  .fmt-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .export-preview-wrap { margin-top: 1.25rem; }
-  .export-preview-label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-  .export-preview-note { font-size: 12px; color: var(--text3); margin-top: 6px; }
-  #export-grid-wrap { overflow: hidden; border-radius: var(--radius); border: 1px solid var(--border); display: inline-block; max-width: 100%; }
-  #export-grid { display: grid; background: #000; gap: 3px; padding: 3px; }
+  .export-row label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); min-width: 70px; }
+  .grid-size-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+  .gs-btn { padding: 5px 11px; font-size: 11px; font-weight: 500; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray3); border-radius: var(--radius); background: transparent; color: var(--gray5); cursor: pointer; transition: all 0.12s; }
+  .gs-btn:hover { border-color: var(--purple); color: var(--purple); }
+  .gs-btn.active { background: var(--purple); color: var(--black); border-color: var(--purple); font-weight: 600; }
+  .format-btns { display: flex; gap: 4px; }
+  .fmt-btn { padding: 5px 14px; font-size: 11px; font-weight: 500; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray3); border-radius: var(--radius); background: transparent; color: var(--gray5); cursor: pointer; transition: all 0.12s; }
+  .fmt-btn.active { background: var(--white); color: var(--black); border-color: var(--white); }
+  .export-preview-wrap { margin-top: 1.5rem; }
+  .export-preview-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); margin-bottom: 10px; }
+  #export-grid-wrap { display: inline-block; max-width: 100%; border: 1px solid var(--gray3); }
+  #export-grid { display: grid; background: #000; gap: 2px; padding: 2px; }
   #export-grid img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
-  #export-grid .exp-ph { width: 100%; aspect-ratio: 1; background: #111; display: flex; align-items: center; justify-content: center; color: #444; font-size: 20px; }
-  .btn-export { margin-top: 1rem; padding: 11px 28px; font-size: 14px; font-weight: 600; background: var(--accent); color: white; border: none; border-radius: var(--radius); cursor: pointer; transition: background 0.15s; }
-  .btn-export:hover { background: var(--accent2); }
-  .btn-export:disabled { opacity: 0.5; cursor: default; }
-  .export-msg { font-size: 13px; color: var(--text2); margin-top: 10px; }
-  .share-bar { display: flex; gap: 8px; align-items: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); flex-wrap: wrap; }
-  .share-bar span { font-size: 13px; color: var(--text2); }
-  .share-bar input { flex: 1; min-width: 180px; padding: 7px 10px; font-size: 12px; font-family: monospace; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg2); color: var(--text2); }
-  .share-bar button { padding: 7px 14px; font-size: 13px; border: 1px solid var(--border2); border-radius: var(--radius); background: transparent; color: var(--text); cursor: pointer; }
-  .share-bar button:hover { background: var(--bg2); }
-  .copied-toast { font-size: 12px; color: #27ae60; }
-  .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
+  #export-grid .exp-ph { width: 100%; aspect-ratio: 1; background: #0a0a0a; display: flex; align-items: center; justify-content: center; color: var(--gray4); font-size: 16px; }
+  .export-preview-note { font-size: 11px; color: var(--gray5); margin-top: 8px; }
+  .btn-export { margin-top: 1.25rem; padding: 11px 28px; font-size: 12px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.06em; text-transform: uppercase; background: var(--purple); color: var(--black); border: none; border-radius: var(--radius); cursor: pointer; transition: opacity 0.15s; }
+  .btn-export:hover { opacity: 0.85; }
+  .btn-export:disabled { opacity: 0.3; cursor: default; }
+  .export-msg { font-size: 12px; color: var(--gray5); margin-top: 10px; }
+  .share-bar { display: flex; gap: 8px; align-items: center; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--gray3); flex-wrap: wrap; }
+  .share-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); }
+  .share-bar input { flex: 1; min-width: 180px; padding: 7px 10px; font-size: 11px; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray3); border-radius: var(--radius); background: var(--gray2); color: var(--gray6); }
+  .share-bar button { padding: 7px 14px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray3); border-radius: var(--radius); background: transparent; color: var(--gray6); cursor: pointer; }
+  .share-bar button:hover { border-color: var(--gray5); color: var(--white); }
+  .copied-toast { font-size: 11px; color: var(--purple); }
+  .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
   .modal-backdrop.open { display: flex; }
-  .modal { background: var(--bg); border-radius: var(--radius-lg); border: 1px solid var(--border); max-width: 460px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
-  .modal img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  .modal { background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius-lg); max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+  .modal img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
   .modal-body { padding: 1.25rem; }
-  .modal-name { font-size: 18px; font-weight: 600; color: var(--text); }
-  .modal-token { font-size: 12px; color: var(--text3); margin-top: 2px; margin-bottom: 1rem; }
-  .traits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 1rem; }
-  .trait-tile { background: var(--bg2); border-radius: var(--radius); padding: 8px 10px; }
-  .trait-tile .tt { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); }
-  .trait-tile .tv { font-size: 13px; font-weight: 600; color: var(--text); margin-top: 2px; }
-  .modal-acts { display: flex; gap: 8px; }
-  .modal-acts a { flex: 1; padding: 10px; font-size: 13px; text-align: center; border-radius: var(--radius); text-decoration: none; border: 1px solid var(--border2); color: var(--text); display: flex; align-items: center; justify-content: center; gap: 5px; }
-  .modal-acts a:hover { background: var(--bg2); }
-  .modal-acts a.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .modal-close { position: absolute; top: 10px; right: 10px; width: 30px; height: 30px; background: var(--bg); border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; color: var(--text2); line-height: 1; }
+  .modal-name { font-size: 16px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
+  .modal-token { font-size: 11px; color: var(--gray5); margin-top: 4px; margin-bottom: 1.25rem; }
+  .traits-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 1.25rem; }
+  .trait-tile { background: var(--gray2); border: 1px solid var(--gray3); padding: 8px 10px; }
+  .trait-tile .tt { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); margin-bottom: 3px; }
+  .trait-tile .tv { font-size: 12px; font-weight: 500; color: var(--white); }
+  .modal-acts { display: flex; gap: 6px; }
+  .modal-acts a { flex: 1; padding: 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; text-align: center; border-radius: var(--radius); text-decoration: none; border: 1px solid var(--gray3); color: var(--gray6); display: flex; align-items: center; justify-content: center; gap: 5px; font-family: 'IBM Plex Mono', monospace; }
+  .modal-acts a:hover { border-color: var(--gray5); color: var(--white); }
+  .modal-acts a.primary { background: var(--purple); color: var(--black); border-color: var(--purple); }
+  .modal-acts a.primary:hover { opacity: 0.85; color: var(--black); }
+  .modal-close { position: absolute; top: 10px; right: 10px; width: 28px; height: 28px; background: rgba(0,0,0,0.6); border-radius: 50%; border: 1px solid var(--gray3); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; color: var(--gray6); line-height: 1; }
+  .modal-close:hover { color: var(--white); border-color: var(--gray5); }
 </style>
 </head>
 <body>
+<div class="grid-bg"></div>
 <div class="page">
-  <div id="setup" class="setup-wrap">
-    <div class="kpr-wordmark">KPRVERSE</div>
-    <h1>Your collection, your grid</h1>
-    <p>Paste any wallet address to see every KPRVERSE NFT it holds — pick your favourites and export a shareable grid.</p>
-    <div class="field">
-      <label for="wallet-in">Wallet address or ENS name</label>
-      <input type="text" id="wallet-in" placeholder="0x… or yourname.eth" autocomplete="off" spellcheck="false" />
+
+  <div id="setup">
+    <div class="kpr-logo-wrap">
+      <svg class="kpr-logo" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M269.563 499.507L356.831 617.03C361.918 624.406 360.316 631.77 351.401 631.77H300.2C293.218 631.77 288.169 630.218 283.909 623.63L231.156 551.14L178.022 622.117C172.935 628.705 169.12 631.808 160.561 631.808H113.582C105.049 631.808 100 626.721 100 618.238V381.59C100 373.057 105.087 368.021 113.582 368.021H155.55C164.084 368.021 169.12 373.108 169.12 381.59V501.835C169.12 508.817 168.738 513.09 164.859 518.901L154.775 533.641C153.223 535.969 153.999 538.296 157.102 538.296H162.914C164.86 538.296 167.187 537.914 168.344 535.968L286.261 376.16C290.522 370.348 295.57 368.021 302.552 368.021H351.401C360.303 368.021 362.261 375.384 356.831 382.76L269.563 499.507Z" fill="white"/>
+        <path d="M393.457 376.172C395.353 373.641 397.812 371.586 400.64 370.171C403.468 368.756 406.587 368.02 409.749 368.02H572.292C575.559 367.86 578.803 368.655 581.626 370.308C584.449 371.961 586.73 374.401 588.188 377.33L627.371 446.373C630.856 452.579 630.474 458.391 627.371 464.597L588.583 534.811C585.48 541.017 579.68 543.713 572.673 543.713H445.065C444.038 543.717 443.053 544.126 442.326 544.853C441.599 545.58 441.19 546.564 441.186 547.592V618.187C441.186 621.786 439.757 625.238 437.212 627.782C434.667 630.327 431.216 631.757 427.617 631.757H385.738C382.138 631.757 378.685 630.328 376.138 627.783C373.591 625.239 372.159 621.787 372.156 618.187V417.339C372.149 409.083 374.827 401.048 379.786 394.447L393.457 376.172ZM450.496 514.247C451.466 514.279 452.43 514.086 453.313 513.682C454.196 513.278 454.973 512.675 455.583 511.919L473.387 489.422C477.203 483.992 482.29 481.283 489.678 481.283H542.037L554.449 455.682L542.037 430.464H441.186V510.368C441.164 510.88 441.25 511.392 441.438 511.869C441.625 512.346 441.912 512.779 442.277 513.138C442.643 513.498 443.08 513.777 443.56 513.957C444.041 514.137 444.553 514.214 445.065 514.183L450.496 514.247Z" fill="white"/>
+        <path d="M675.38 377.304C676.915 374.504 679.175 372.169 681.922 370.542C684.67 368.916 687.804 368.058 690.997 368.059H842.298C849.674 368.059 854.71 371.162 858.208 377.368L897.378 446.411C899.091 449.142 900 452.3 900 455.524C900 458.747 899.091 461.905 897.378 464.636L852.777 543.764L891.947 615.517C897.034 624.826 891.947 631.808 881.086 631.808H841.522C834.159 631.808 827.953 629.48 824.074 622.905L781.406 543.777H715.084C714.578 543.777 714.077 543.878 713.609 544.073C713.142 544.269 712.719 544.556 712.364 544.917C712.009 545.278 711.729 545.706 711.541 546.176C711.353 546.646 711.261 547.149 711.269 547.656V618.251C711.266 621.851 709.833 625.302 707.286 627.847C704.74 630.391 701.287 631.82 697.687 631.82H655.795C652.196 631.82 648.745 630.391 646.2 627.846C643.655 625.301 642.226 621.85 642.226 618.251V447.836C642.224 441.426 643.838 435.119 646.918 429.497L675.38 377.304ZM811.992 481.321L824.404 455.721L811.992 430.502H711.155V510.406C711.133 510.913 711.217 511.419 711.401 511.891C711.585 512.364 711.865 512.793 712.224 513.152C712.583 513.511 713.012 513.791 713.485 513.975C713.957 514.159 714.463 514.243 714.97 514.221H720.4C721.371 514.256 722.336 514.063 723.219 513.659C724.102 513.255 724.879 512.651 725.487 511.894L743.292 489.397C747.107 483.966 752.194 481.257 759.583 481.257L811.992 481.321Z" fill="white"/>
+      </svg>
+      <div class="kpr-sub">Collection Gallery</div>
     </div>
-    <button class="btn-go" id="go-btn" onclick="buildGrid()">Build my grid</button>
-    <div id="err" class="error-msg"></div>
-    <p class="setup-note">Works with any Ethereum wallet. Only KPRVERSE NFTs are shown.</p>
+
+    <div class="setup-wrap">
+      <h1>Your collection,<br><span>your grid.</span></h1>
+      <p>Paste any wallet address to see every KPRVERSE NFT it holds — pick your favourites and export a shareable grid.</p>
+      <div class="field">
+        <label for="wallet-in">Wallet address or ENS name</label>
+        <input type="text" id="wallet-in" placeholder="0x… or yourname.eth" autocomplete="off" spellcheck="false" />
+      </div>
+      <button class="btn-primary" id="go-btn" onclick="buildGrid()">Build my grid</button>
+      <div id="err" class="error-msg"></div>
+      <p class="setup-note">Works with any Ethereum wallet. Only KPRVERSE NFTs are shown.</p>
+    </div>
   </div>
 
   <div id="gallery">
-    <div class="gallery-top">
-      <div>
-        <div class="kpr-wordmark">KPRVERSE</div>
-        <h1>Your NFTs</h1>
-        <div class="wallet-chip" id="wallet-chip"></div>
+    <div class="gallery-header">
+      <div class="gallery-header-left">
+        <svg class="kpr-logo" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:18px;margin-bottom:8px">
+          <path d="M269.563 499.507L356.831 617.03C361.918 624.406 360.316 631.77 351.401 631.77H300.2C293.218 631.77 288.169 630.218 283.909 623.63L231.156 551.14L178.022 622.117C172.935 628.705 169.12 631.808 160.561 631.808H113.582C105.049 631.808 100 626.721 100 618.238V381.59C100 373.057 105.087 368.021 113.582 368.021H155.55C164.084 368.021 169.12 373.108 169.12 381.59V501.835C169.12 508.817 168.738 513.09 164.859 518.901L154.775 533.641C153.223 535.969 153.999 538.296 157.102 538.296H162.914C164.86 538.296 167.187 537.914 168.344 535.968L286.261 376.16C290.522 370.348 295.57 368.021 302.552 368.021H351.401C360.303 368.021 362.261 375.384 356.831 382.76L269.563 499.507Z" fill="white"/>
+          <path d="M393.457 376.172C395.353 373.641 397.812 371.586 400.64 370.171C403.468 368.756 406.587 368.02 409.749 368.02H572.292C575.559 367.86 578.803 368.655 581.626 370.308C584.449 371.961 586.73 374.401 588.188 377.33L627.371 446.373C630.856 452.579 630.474 458.391 627.371 464.597L588.583 534.811C585.48 541.017 579.68 543.713 572.673 543.713H445.065C444.038 543.717 443.053 544.126 442.326 544.853C441.599 545.58 441.19 546.564 441.186 547.592V618.187C441.186 621.786 439.757 625.238 437.212 627.782C434.667 630.327 431.216 631.757 427.617 631.757H385.738C382.138 631.757 378.685 630.328 376.138 627.783C373.591 625.239 372.159 621.787 372.156 618.187V417.339C372.149 409.083 374.827 401.048 379.786 394.447L393.457 376.172ZM450.496 514.247C451.466 514.279 452.43 514.086 453.313 513.682C454.196 513.278 454.973 512.675 455.583 511.919L473.387 489.422C477.203 483.992 482.29 481.283 489.678 481.283H542.037L554.449 455.682L542.037 430.464H441.186V510.368C441.164 510.88 441.25 511.392 441.438 511.869C441.625 512.346 441.912 512.779 442.277 513.138C442.643 513.498 443.08 513.777 443.56 513.957C444.041 514.137 444.553 514.214 445.065 514.183L450.496 514.247Z" fill="white"/>
+          <path d="M675.38 377.304C676.915 374.504 679.175 372.169 681.922 370.542C684.67 368.916 687.804 368.058 690.997 368.059H842.298C849.674 368.059 854.71 371.162 858.208 377.368L897.378 446.411C899.091 449.142 900 452.3 900 455.524C900 458.747 899.091 461.905 897.378 464.636L852.777 543.764L891.947 615.517C897.034 624.826 891.947 631.808 881.086 631.808H841.522C834.159 631.808 827.953 629.48 824.074 622.905L781.406 543.777H715.084C714.578 543.777 714.077 543.878 713.609 544.073C713.142 544.269 712.719 544.556 712.364 544.917C712.009 545.278 711.729 545.706 711.541 546.176C711.353 546.646 711.261 547.149 711.269 547.656V618.251C711.266 621.851 709.833 625.302 707.286 627.847C704.74 630.391 701.287 631.82 697.687 631.82H655.795C652.196 631.82 648.745 630.391 646.2 627.846C643.655 625.301 642.226 621.85 642.226 618.251V447.836C642.224 441.426 643.838 435.119 646.918 429.497L675.38 377.304ZM811.992 481.321L824.404 455.721L811.992 430.502H711.155V510.406C711.133 510.913 711.217 511.419 711.401 511.891C711.585 512.364 711.865 512.793 712.224 513.152C712.583 513.511 713.012 513.791 713.485 513.975C713.957 514.159 714.463 514.243 714.97 514.221H720.4C721.371 514.256 722.336 514.063 723.219 513.659C724.102 513.255 724.879 512.651 725.487 511.894L743.292 489.397C747.107 483.966 752.194 481.257 759.583 481.257L811.992 481.321Z" fill="white"/>
+        </svg>
+        <div class="wallet-chip"><span class="wallet-dot"></span><span id="wallet-chip"></span></div>
       </div>
-      <button class="btn-back" onclick="resetGallery()">← New wallet</button>
+      <button class="btn-ghost" onclick="resetGallery()">← New wallet</button>
     </div>
+
     <div class="stats-row">
       <div class="stat-box"><div class="s-l">Holding</div><div class="s-v" id="s-held">—</div></div>
       <div class="stat-box"><div class="s-l">Unique traits</div><div class="s-v" id="s-traits">—</div></div>
-      <div class="stat-box"><div class="s-l">Selected</div><div class="s-v" id="s-selected" style="color:var(--accent)">0</div></div>
+      <div class="stat-box"><div class="s-l">Selected</div><div class="s-v accent" id="s-selected">0</div></div>
     </div>
+
     <div class="mode-bar">
       <span class="mode-label">Mode</span>
       <button class="mode-btn active" id="mode-browse" onclick="setMode('browse')">Browse</button>
-      <button class="mode-btn" id="mode-select" onclick="setMode('select')">✦ Select to export</button>
+      <button class="mode-btn sel" id="mode-select" onclick="setMode('select')">✦ Select to export</button>
       <div class="selection-info" id="sel-info" style="display:none">
         <span><span class="selection-count" id="sel-count">0</span> selected</span>
-        <button class="btn-clear-sel" onclick="clearSelection()">Clear all</button>
+        <button class="btn-clear" onclick="clearSelection()">Clear all</button>
       </div>
     </div>
+
     <div class="toolbar">
       <input type="text" id="search-in" placeholder="Search by name or ID…" oninput="applyFilter()" />
       <select id="sort-in" onchange="applyFilter()">
@@ -186,14 +237,16 @@
       </div>
       <span class="count-lbl" id="count-lbl"></span>
     </div>
-    <div id="grid" class="grid g3"></div>
+
+    <div id="grid" class="nft-grid g3"></div>
     <div id="load-more" class="load-more"></div>
+
     <div class="export-panel" id="export-panel">
-      <h2>Export your grid</h2>
-      <p>Select a grid size below — slots filled in selection order. Empty slots appear black.</p>
+      <h2>Export grid</h2>
+      <p>Choose your grid size — slots fill in selection order. Empty slots appear black.</p>
       <div class="export-options">
         <div class="export-row">
-          <label>Grid size</label>
+          <label>Size</label>
           <div class="grid-size-btns">
             <button class="gs-btn active" onclick="setGridSize(2)" id="gs-2">2×2</button>
             <button class="gs-btn" onclick="setGridSize(3)" id="gs-3">3×3</button>
@@ -216,19 +269,18 @@
       </div>
       <div class="export-preview-wrap">
         <div class="export-preview-label">Preview</div>
-        <div id="export-grid-wrap">
-          <div id="export-grid"></div>
-        </div>
+        <div id="export-grid-wrap"><div id="export-grid"></div></div>
         <div class="export-preview-note" id="export-preview-note"></div>
       </div>
       <button class="btn-export" id="btn-export" onclick="exportGrid()">↓ Download grid image</button>
       <div class="export-msg" id="export-msg"></div>
     </div>
+
     <div class="share-bar">
-      <span>Share wallet:</span>
+      <span class="share-label">Share</span>
       <input type="text" id="share-url" readonly onclick="copyUrl()" />
       <button onclick="copyUrl()">Copy link</button>
-      <span class="copied-toast" id="copied" style="display:none">Copied!</span>
+      <span class="copied-toast" id="copied" style="display:none">Copied.</span>
     </div>
   </div>
 </div>
@@ -242,7 +294,7 @@
       <div class="modal-token" id="m-token"></div>
       <div class="traits-grid" id="m-traits"></div>
       <div class="modal-acts">
-        <a id="m-os" class="primary" href="#" target="_blank" rel="noopener">↗ View on OpenSea</a>
+        <a id="m-os" class="primary" href="#" target="_blank" rel="noopener">↗ OpenSea</a>
         <a href="#" onclick="closeModal();return false">Close</a>
       </div>
     </div>
@@ -251,18 +303,13 @@
 
 <script>
 let allNFTs = [], filteredNFTs = [], nextCursor = null, wallet = '';
-let mode = 'browse';
-let selectedIds = [];
-let exportGridSize = 2;
-let exportFormat = 'png';
+let mode = 'browse', selectedIds = [], exportGridSize = 2, exportFormat = 'png';
 
 async function buildGrid() {
   wallet = document.getElementById('wallet-in').value.trim();
-  const err = document.getElementById('err');
-  const btn = document.getElementById('go-btn');
+  const err = document.getElementById('err'), btn = document.getElementById('go-btn');
   if (!wallet) { err.textContent = 'Please enter a wallet address.'; return; }
-  err.textContent = '';
-  btn.disabled = true; btn.textContent = 'Loading…';
+  err.textContent = ''; btn.disabled = true; btn.textContent = 'Loading…';
   allNFTs = []; nextCursor = null; selectedIds = [];
   try {
     await fetchBatch();
@@ -271,9 +318,7 @@ async function buildGrid() {
     const short = wallet.length > 16 ? wallet.slice(0,6)+'…'+wallet.slice(-4) : wallet;
     document.getElementById('wallet-chip').textContent = short;
     document.getElementById('share-url').value = window.location.origin + window.location.pathname + '?wallet=' + encodeURIComponent(wallet);
-  } catch(e) {
-    err.textContent = 'Error: ' + e.message;
-  }
+  } catch(e) { err.textContent = 'Error: ' + e.message; }
   btn.disabled = false; btn.textContent = 'Build my grid';
 }
 
@@ -286,53 +331,42 @@ async function fetchBatch(cursor) {
   if (data.error) throw new Error(data.error);
   allNFTs = cursor ? [...allNFTs, ...(data.nfts||[])] : (data.nfts||[]);
   nextCursor = data.next || null;
-  updateStats();
-  applyFilter();
+  updateStats(); applyFilter();
 }
 
 function updateStats() {
   document.getElementById('s-held').textContent = allNFTs.length;
   const tc = {};
-  allNFTs.forEach(n => (n.traits||[]).forEach(t => {
-    const k = t.trait_type+':'+t.value; tc[k] = (tc[k]||0)+1;
-  }));
+  allNFTs.forEach(n => (n.traits||[]).forEach(t => { const k = t.trait_type+':'+t.value; tc[k]=(tc[k]||0)+1; }));
   const unique = new Set(allNFTs.flatMap(n=>(n.traits||[]).map(t=>t.trait_type+':'+t.value)));
   document.getElementById('s-traits').textContent = unique.size;
-  const lm = document.getElementById('load-more');
-  lm.innerHTML = nextCursor ? '<button onclick="loadMore()">Load more</button>' : '';
+  document.getElementById('load-more').innerHTML = nextCursor
+    ? '<button onclick="loadMore()">Load more</button>' : '';
 }
 
 async function loadMore() {
-  document.getElementById('load-more').innerHTML = '<span style="font-size:13px;color:var(--text2)">Loading…</span>';
+  document.getElementById('load-more').innerHTML = '<span style="font-size:12px;color:var(--gray5)">Loading…</span>';
   await fetchBatch(nextCursor);
 }
 
 function setMode(m) {
   mode = m;
-  document.getElementById('mode-browse').classList.toggle('active', m === 'browse');
-  document.getElementById('mode-select').classList.toggle('active', m === 'select');
-  document.getElementById('sel-info').style.display = m === 'select' ? 'flex' : 'none';
-  document.getElementById('export-panel').classList.toggle('visible', m === 'select');
+  document.getElementById('mode-browse').classList.toggle('active', m==='browse');
+  document.getElementById('mode-select').classList.toggle('active', m==='select');
+  document.getElementById('sel-info').style.display = m==='select' ? 'flex' : 'none';
+  document.getElementById('export-panel').classList.toggle('visible', m==='select');
   renderGrid();
-  if (m === 'select') updateExportPreview();
+  if (m==='select') updateExportPreview();
 }
 
 function toggleSelect(id) {
   const idx = selectedIds.indexOf(id);
-  if (idx === -1) { selectedIds.push(id); } else { selectedIds.splice(idx, 1); }
-  updateSelectionUI();
-  renderGrid();
-  updateExportPreview();
+  if (idx===-1) { selectedIds.push(id); } else { selectedIds.splice(idx,1); }
+  updateSelUI(); renderGrid(); updateExportPreview();
 }
 
-function clearSelection() {
-  selectedIds = [];
-  updateSelectionUI();
-  renderGrid();
-  updateExportPreview();
-}
-
-function updateSelectionUI() {
+function clearSelection() { selectedIds=[]; updateSelUI(); renderGrid(); updateExportPreview(); }
+function updateSelUI() {
   const n = selectedIds.length;
   document.getElementById('sel-count').textContent = n;
   document.getElementById('s-selected').textContent = n;
@@ -361,14 +395,13 @@ function renderGrid() {
     const name = n.name || 'KPR #'+n.identifier;
     const selIdx = selectedIds.indexOf(n.identifier);
     const isSel = selIdx !== -1;
-    const selNum = isSel ? selIdx + 1 : '';
-    const clickFn = mode === 'select' ? "toggleSelect('" + n.identifier + "')" : "openModal('" + n.identifier + "')";
-    return '<div class="nft-card' + (isSel?' selected':'') + '" onclick="' + clickFn + '">' +
+    const clickFn = mode==='select' ? "toggleSelect('"+n.identifier+"')" : "openModal('"+n.identifier+"')";
+    return '<div class="nft-card'+(isSel?' selected':'')+'" onclick="'+clickFn+'">' +
       '<span class="sel-badge">✓</span>' +
-      '<span class="sel-order">' + selNum + '</span>' +
-      (img ? '<img src="' + img + '" alt="' + name + '" loading="lazy" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">' : '') +
-      '<div class="ph"' + (img?' style="display:none"':'') + '>◈</div>' +
-      '<div class="ci"><div class="cn">' + name + '</div><div class="cid">#' + n.identifier + '</div></div>' +
+      '<span class="sel-order">'+(isSel?selIdx+1:'')+'</span>' +
+      (img ? '<img src="'+img+'" alt="'+name+'" loading="lazy" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">' : '') +
+      '<div class="ph"'+(img?' style="display:none"':'')+'>◈</div>' +
+      '<div class="ci"><div class="cn">'+name+'</div><div class="cid">#'+n.identifier+'</div></div>' +
       '</div>';
   }).join('');
 }
@@ -397,85 +430,67 @@ function updateExportPreview() {
   const total = exportGridSize * exportGridSize;
   const grid = document.getElementById('export-grid');
   const note = document.getElementById('export-preview-note');
-  const cellSize = Math.min(80, Math.floor(420 / exportGridSize));
-  grid.style.gridTemplateColumns = 'repeat(' + exportGridSize + ', ' + cellSize + 'px)';
-  const slots = Array.from({length: total}, (_, i) => {
+  const cellSize = Math.min(76, Math.floor(400 / exportGridSize));
+  grid.style.gridTemplateColumns = 'repeat('+exportGridSize+', '+cellSize+'px)';
+  grid.innerHTML = Array.from({length: total}, (_,i) => {
     const id = selectedIds[i];
-    const nft = id ? allNFTs.find(n => n.identifier === id) : null;
+    const nft = id ? allNFTs.find(n=>n.identifier===id) : null;
     const img = nft ? (nft.display_image_url || nft.image_url || '') : '';
-    if (img) return '<img src="' + img + '" style="width:' + cellSize + 'px;height:' + cellSize + 'px;object-fit:cover;display:block" crossorigin="anonymous" />';
-    return '<div class="exp-ph" style="width:' + cellSize + 'px;height:' + cellSize + 'px">◈</div>';
-  });
-  grid.innerHTML = slots.join('');
+    return img
+      ? '<img src="'+img+'" style="width:'+cellSize+'px;height:'+cellSize+'px;object-fit:cover;display:block" crossorigin="anonymous" />'
+      : '<div class="exp-ph" style="width:'+cellSize+'px;height:'+cellSize+'px">◈</div>';
+  }).join('');
   const filled = Math.min(selectedIds.length, total);
   const empty = total - filled;
-  note.textContent = filled + ' of ' + total + ' slots filled' + (empty > 0 ? ' · ' + empty + ' empty slot' + (empty>1?'s':'') + ' will appear black' : ' · ready to export');
+  note.textContent = filled+' of '+total+' slots filled'+(empty>0?' · '+empty+' empty slot'+(empty>1?'s':'')+' will appear black':' · ready to export');
 }
 
 async function exportGrid() {
-  const btn = document.getElementById('btn-export');
-  const msg = document.getElementById('export-msg');
+  const btn = document.getElementById('btn-export'), msg = document.getElementById('export-msg');
   btn.disabled = true; btn.textContent = 'Generating…';
-  msg.textContent = 'Loading images, this may take a moment…';
+  msg.textContent = 'Loading images…';
   try {
-    const total = exportGridSize * exportGridSize;
-    const cellSize = 300;
-    const gap = 4;
-    const canvasSize = exportGridSize * cellSize + (exportGridSize + 1) * gap;
+    const total = exportGridSize * exportGridSize, cellSize = 300, gap = 3;
+    const canvasSize = exportGridSize * cellSize + (exportGridSize+1) * gap;
     const canvas = document.createElement('canvas');
     canvas.width = canvasSize; canvas.height = canvasSize;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, canvasSize, canvasSize);
-    const loadImage = (src) => new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => resolve(img);
-      img.onerror = () => resolve(null);
-      img.src = src;
+    ctx.fillStyle = '#000000'; ctx.fillRect(0,0,canvasSize,canvasSize);
+    const loadImg = src => new Promise(res => {
+      const img = new Image(); img.crossOrigin='anonymous';
+      img.onload=()=>res(img); img.onerror=()=>res(null); img.src=src;
     });
-    for (let i = 0; i < total; i++) {
+    for (let i=0; i<total; i++) {
       const id = selectedIds[i];
-      const nft = id ? allNFTs.find(n => n.identifier === id) : null;
-      const imgUrl = nft ? (nft.display_image_url || nft.image_url || '') : '';
-      const col = i % exportGridSize;
-      const row = Math.floor(i / exportGridSize);
-      const x = gap + col * (cellSize + gap);
-      const y = gap + row * (cellSize + gap);
+      const nft = id ? allNFTs.find(n=>n.identifier===id) : null;
+      const imgUrl = nft ? (nft.display_image_url||nft.image_url||'') : '';
+      const col = i%exportGridSize, row = Math.floor(i/exportGridSize);
+      const x = gap + col*(cellSize+gap), y = gap + row*(cellSize+gap);
       if (imgUrl) {
-        const img = await loadImage(imgUrl);
-        if (img) { ctx.drawImage(img, x, y, cellSize, cellSize); }
-        else { ctx.fillStyle = '#111111'; ctx.fillRect(x, y, cellSize, cellSize); }
-      } else {
-        ctx.fillStyle = '#111111'; ctx.fillRect(x, y, cellSize, cellSize);
-      }
+        const img = await loadImg(imgUrl);
+        if (img) ctx.drawImage(img,x,y,cellSize,cellSize);
+        else { ctx.fillStyle='#0a0a0a'; ctx.fillRect(x,y,cellSize,cellSize); }
+      } else { ctx.fillStyle='#0a0a0a'; ctx.fillRect(x,y,cellSize,cellSize); }
     }
-    const mimeType = exportFormat === 'jpg' ? 'image/jpeg' : 'image/png';
-    const quality = exportFormat === 'jpg' ? 0.92 : 1.0;
-    const dataUrl = canvas.toDataURL(mimeType, quality);
+    const mime = exportFormat==='jpg' ? 'image/jpeg' : 'image/png';
+    const dataUrl = canvas.toDataURL(mime, exportFormat==='jpg'?0.92:1.0);
     const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = 'kprverse-grid-' + exportGridSize + 'x' + exportGridSize + '.' + exportFormat;
-    a.click();
-    msg.textContent = '✓ Downloaded as ' + exportGridSize + '×' + exportGridSize + ' ' + exportFormat.toUpperCase();
-  } catch(e) {
-    msg.textContent = 'Export failed: ' + e.message;
-  }
-  btn.disabled = false; btn.textContent = '↓ Download grid image';
+    a.href = dataUrl; a.download = 'kprverse-'+exportGridSize+'x'+exportGridSize+'.'+exportFormat; a.click();
+    msg.textContent = '✓ Downloaded — '+exportGridSize+'×'+exportGridSize+' '+exportFormat.toUpperCase();
+  } catch(e) { msg.textContent = 'Export failed: '+e.message; }
+  btn.disabled=false; btn.textContent='↓ Download grid image';
 }
 
 function openModal(id) {
-  const n = allNFTs.find(x=>String(x.identifier)===String(id));
-  if (!n) return;
-  const name = n.name||'KPR #'+n.identifier;
-  const img = n.display_image_url||n.image_url||'';
+  const n = allNFTs.find(x=>String(x.identifier)===String(id)); if (!n) return;
+  const name = n.name||'KPR #'+n.identifier, img = n.display_image_url||n.image_url||'';
   document.getElementById('m-img').src = img;
   document.getElementById('m-img').alt = name;
   document.getElementById('m-name').textContent = name;
   document.getElementById('m-token').textContent = 'Token #'+n.identifier;
   document.getElementById('m-traits').innerHTML = (n.traits||[]).length
     ? (n.traits||[]).map(t=>'<div class="trait-tile"><div class="tt">'+t.trait_type+'</div><div class="tv">'+t.value+'</div></div>').join('')
-    : '<p style="grid-column:1/-1;font-size:13px;color:var(--text2)">No traits found.</p>';
+    : '<p style="grid-column:1/-1;font-size:12px;color:var(--gray5)">No traits found.</p>';
   document.getElementById('m-os').href = 'https://opensea.io/assets/ethereum/'+n.contract+'/'+n.identifier;
   document.getElementById('modal-bd').classList.add('open');
 }
@@ -485,8 +500,7 @@ function closeBd(e) { if (e.target===document.getElementById('modal-bd')) closeM
 
 function copyUrl() {
   navigator.clipboard.writeText(document.getElementById('share-url').value).then(()=>{
-    const t = document.getElementById('copied');
-    t.style.display='inline'; setTimeout(()=>t.style.display='none', 2000);
+    const t=document.getElementById('copied'); t.style.display='inline'; setTimeout(()=>t.style.display='none',2000);
   });
 }
 
@@ -500,7 +514,7 @@ function resetGallery() {
 
 document.getElementById('wallet-in').addEventListener('keydown', e => { if(e.key==='Enter') buildGrid(); });
 const params = new URLSearchParams(window.location.search);
-if (params.get('wallet')) { document.getElementById('wallet-in').value = params.get('wallet'); buildGrid(); }
+if (params.get('wallet')) { document.getElementById('wallet-in').value=params.get('wallet'); buildGrid(); }
 </script>
 </body>
 </html>
