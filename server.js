@@ -83,7 +83,7 @@ const server = http.createServer((req, res) => {
   serveHTML(res);
 });
 
-server.listen(PORT, () => {
-  console.log(`KPRVERSE Gallery → http://localhost:${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`KPRVERSE Gallery → http://0.0.0.0:${PORT}`);
   if (!OPENSEA_API_KEY) console.warn("⚠  Set OPENSEA_API_KEY environment variable");
 });
