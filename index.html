@@ -41,13 +41,8 @@
   }
   .page { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; position: relative; z-index: 1; }
   .kpr-logo { display: block; height: 22px; width: auto; }
-  .kpr-logo path { fill: var(--white); }
   .kpr-logo-wrap { margin-bottom: 3rem; }
   .kpr-sub { font-size: 10px; letter-spacing: 0.15em; color: var(--gray5); text-transform: uppercase; margin-top: 6px; }
-  .setup-wrap { max-width: 460px; margin: 4rem auto 0; }
-  .setup-wrap h1 { font-size: 26px; font-weight: 600; color: var(--white); margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.2; }
-  .setup-wrap h1 span { color: var(--purple); }
-  .setup-wrap p { font-size: 13px; color: var(--gray6); line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
   .field { margin-bottom: 12px; }
   .field label { display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray5); margin-bottom: 8px; }
   .field input { width: 100%; padding: 12px 14px; font-size: 13px; font-family: 'IBM Plex Mono', monospace; background: var(--gray1); border: 1px solid var(--gray3); border-radius: var(--radius); color: var(--white); transition: border-color 0.15s; }
@@ -58,7 +53,6 @@
   .btn-primary:disabled { opacity: 0.3; cursor: default; }
   .setup-note { font-size: 11px; color: var(--gray5); margin-top: 14px; line-height: 1.6; }
   .error-msg { color: #ff6b6b; font-size: 12px; margin-top: 10px; }
-  .rule { border: none; border-top: 1px solid var(--gray3); margin: 2rem 0; }
   #gallery { display: none; }
   .gallery-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 1.75rem; flex-wrap: wrap; }
   .gallery-header-left h1 { font-size: 18px; font-weight: 600; color: var(--white); letter-spacing: -0.01em; }
@@ -170,140 +164,68 @@
 <div class="page">
 
   <div id="setup">
-    <div class="kpr-logo-wrap">
-      <svg class="kpr-logo" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M269.563 499.507L356.831 617.03C361.918 624.406 360.316 631.77 351.401 631.77H300.2C293.218 631.77 288.169 630.218 283.909 623.63L231.156 551.14L178.022 622.117C172.935 628.705 169.12 631.808 160.561 631.808H113.582C105.049 631.808 100 626.721 100 618.238V381.59C100 373.057 105.087 368.021 113.582 368.021H155.55C164.084 368.021 169.12 373.108 169.12 381.59V501.835C169.12 508.817 168.738 513.09 164.859 518.901L154.775 533.641C153.223 535.969 153.999 538.296 157.102 538.296H162.914C164.86 538.296 167.187 537.914 168.344 535.968L286.261 376.16C290.522 370.348 295.57 368.021 302.552 368.021H351.401C360.303 368.021 362.261 375.384 356.831 382.76L269.563 499.507Z" fill="white"/>
-        <path d="M393.457 376.172C395.353 373.641 397.812 371.586 400.64 370.171C403.468 368.756 406.587 368.02 409.749 368.02H572.292C575.559 367.86 578.803 368.655 581.626 370.308C584.449 371.961 586.73 374.401 588.188 377.33L627.371 446.373C630.856 452.579 630.474 458.391 627.371 464.597L588.583 534.811C585.48 541.017 579.68 543.713 572.673 543.713H445.065C444.038 543.717 443.053 544.126 442.326 544.853C441.599 545.58 441.19 546.564 441.186 547.592V618.187C441.186 621.786 439.757 625.238 437.212 627.782C434.667 630.327 431.216 631.757 427.617 631.757H385.738C382.138 631.757 378.685 630.328 376.138 627.783C373.591 625.239 372.159 621.787 372.156 618.187V417.339C372.149 409.083 374.827 401.048 379.786 394.447L393.457 376.172ZM450.496 514.247C451.466 514.279 452.43 514.086 453.313 513.682C454.196 513.278 454.973 512.675 455.583 511.919L473.387 489.422C477.203 483.992 482.29 481.283 489.678 481.283H542.037L554.449 455.682L542.037 430.464H441.186V510.368C441.164 510.88 441.25 511.392 441.438 511.869C441.625 512.346 441.912 512.779 442.277 513.138C442.643 513.498 443.08 513.777 443.56 513.957C444.041 514.137 444.553 514.214 445.065 514.183L450.496 514.247Z" fill="white"/>
-        <path d="M675.38 377.304C676.915 374.504 679.175 372.169 681.922 370.542C684.67 368.916 687.804 368.058 690.997 368.059H842.298C849.674 368.059 854.71 371.162 858.208 377.368L897.378 446.411C899.091 449.142 900 452.3 900 455.524C900 458.747 899.091 461.905 897.378 464.636L852.777 543.764L891.947 615.517C897.034 624.826 891.947 631.808 881.086 631.808H841.522C834.159 631.808 827.953 629.48 824.074 622.905L781.406 543.777H715.084C714.578 543.777 714.077 543.878 713.609 544.073C713.142 544.269 712.719 544.556 712.364 544.917C712.009 545.278 711.729 545.706 711.541 546.176C711.353 546.646 711.261 547.149 711.269 547.656V618.251C711.266 621.851 709.833 625.302 707.286 627.847C704.74 630.391 701.287 631.82 697.687 631.82H655.795C652.196 631.82 648.745 630.391 646.2 627.846C643.655 625.301 642.226 621.85 642.226 618.251V447.836C642.224 441.426 643.838 435.119 646.918 429.497L675.38 377.304ZM811.992 481.321L824.404 455.721L811.992 430.502H711.155V510.406C711.133 510.913 711.217 511.419 711.401 511.891C711.585 512.364 711.865 512.793 712.224 513.152C712.583 513.511 713.012 513.791 713.485 513.975C713.957 514.159 714.463 514.243 714.97 514.221H720.4C721.371 514.256 722.336 514.063 723.219 513.659C724.102 513.255 724.879 512.651 725.487 511.894L743.292 489.397C747.107 483.966 752.194 481.257 759.583 481.257L811.992 481.321Z" fill="white"/>
-      </svg>
-      <div class="kpr-sub">Collection Gallery</div>
-    </div>
 
-    <div class="setup-wrap">
-      <h1>Your collection,<br><span>your grid.</span></h1>
-      <p>Paste any wallet address to see every KPRVERSE NFT it holds — pick your favourites and export a shareable grid.</p>
-      <div class="field">
-        <label for="wallet-in">Wallet address or ENS name</label>
-        <input type="text" id="wallet-in" placeholder="0x… or yourname.eth" autocomplete="off" spellcheck="false" />
+    <div style="display:flex;align-items:center;justify-content:center;gap:0;min-height:80vh;position:relative">
+
+      <!-- Left symbol -->
+      <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;padding-right:3rem;opacity:0.12;pointer-events:none;user-select:none" aria-hidden="true">
+        <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:min(220px,18vw);height:auto">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M429.293 652.138C429.293 659.007 434.861 664.575 441.73 664.575H463.752C470.621 664.575 476.19 670.144 476.19 677.013V887.562C476.19 894.432 481.758 900 488.627 900H510.649C517.518 900 523.086 894.432 523.086 887.562V677.013C523.086 670.144 528.655 664.575 535.524 664.575H557.546C564.415 664.575 569.983 659.007 569.983 652.138V535.886C569.983 529.017 575.552 523.448 582.421 523.448H699.105C705.974 523.448 711.542 517.88 711.542 511.011V488.989C711.542 482.12 705.974 476.552 699.105 476.552H582.421C575.552 476.552 569.983 470.983 569.983 464.114V347.862C569.983 340.993 564.415 335.425 557.546 335.425H535.524C528.655 335.425 523.086 329.856 523.086 322.987V112.438C523.086 105.568 517.518 100 510.649 100H488.627C481.758 100 476.19 105.568 476.19 112.438V322.987C476.19 329.856 470.621 335.425 463.752 335.425H441.73C434.861 335.425 429.293 340.993 429.293 347.862V464.114C429.293 470.983 423.724 476.552 416.855 476.552H300.438C293.568 476.552 288 482.12 288 488.989V511.011C288 517.88 293.568 523.448 300.438 523.448H416.855C423.724 523.448 429.293 529.017 429.293 535.886V652.138ZM488.626 335.203C481.757 335.203 476.189 340.772 476.189 347.641V464.114C476.189 470.983 470.62 476.552 463.751 476.552H441.729C434.86 476.552 429.292 482.12 429.292 488.989V511.128C429.292 517.997 434.86 523.566 441.729 523.566H463.751C470.62 523.566 476.189 529.134 476.189 536.003V652.36C476.189 659.229 481.757 664.798 488.626 664.798H510.648C517.517 664.798 523.085 659.229 523.085 652.36V535.886C523.085 529.017 528.654 523.449 535.523 523.449H557.544C564.414 523.449 569.982 517.88 569.982 511.011V489.077C569.982 482.208 564.414 476.64 557.544 476.64H535.523C528.654 476.64 523.085 471.071 523.085 464.202V347.641C523.085 340.772 517.517 335.203 510.648 335.203H488.626Z" fill="white"/>
+        </svg>
       </div>
-      <button class="btn-primary" id="go-btn" onclick="buildGrid()">Build my grid</button>
-      <div id="err" class="error-msg"></div>
-      <p class="setup-note">Works with any Ethereum wallet. Only KPRVERSE NFTs are shown.</p>
 
-      <div id="community-feed" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--gray3)">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px">
-          <div>
-            <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray5);margin-bottom:4px">Community</div>
-            <div style="font-size:15px;font-weight:600;color:var(--white);letter-spacing:-0.01em">#KPRGRID</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <button onclick="slidePrev()" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:14px;font-family:'IBM Plex Mono',monospace">←</button>
-            <span id="slide-counter" style="font-size:10px;letter-spacing:0.08em;color:var(--gray5);min-width:32px;text-align:center">1 / 5</span>
-            <button onclick="slideNext()" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:14px;font-family:'IBM Plex Mono',monospace">→</button>
-            <button onclick="toggleAuto()" id="auto-btn" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:11px;font-family:'IBM Plex Mono',monospace">▶</button>
-          </div>
+      <!-- Centre content -->
+      <div style="flex:0 0 auto;width:100%;max-width:460px">
+        <div class="kpr-logo-wrap">
+          <svg class="kpr-logo" viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M269.563 499.507L356.831 617.03C361.918 624.406 360.316 631.77 351.401 631.77H300.2C293.218 631.77 288.169 630.218 283.909 623.63L231.156 551.14L178.022 622.117C172.935 628.705 169.12 631.808 160.561 631.808H113.582C105.049 631.808 100 626.721 100 618.238V381.59C100 373.057 105.087 368.021 113.582 368.021H155.55C164.084 368.021 169.12 373.108 169.12 381.59V501.835C169.12 508.817 168.738 513.09 164.859 518.901L154.775 533.641C153.223 535.969 153.999 538.296 157.102 538.296H162.914C164.86 538.296 167.187 537.914 168.344 535.968L286.261 376.16C290.522 370.348 295.57 368.021 302.552 368.021H351.401C360.303 368.021 362.261 375.384 356.831 382.76L269.563 499.507Z" fill="white"/>
+            <path d="M393.457 376.172C395.353 373.641 397.812 371.586 400.64 370.171C403.468 368.756 406.587 368.02 409.749 368.02H572.292C575.559 367.86 578.803 368.655 581.626 370.308C584.449 371.961 586.73 374.401 588.188 377.33L627.371 446.373C630.856 452.579 630.474 458.391 627.371 464.597L588.583 534.811C585.48 541.017 579.68 543.713 572.673 543.713H445.065C444.038 543.717 443.053 544.126 442.326 544.853C441.599 545.58 441.19 546.564 441.186 547.592V618.187C441.186 621.786 439.757 625.238 437.212 627.782C434.667 630.327 431.216 631.757 427.617 631.757H385.738C382.138 631.757 378.685 630.328 376.138 627.783C373.591 625.239 372.159 621.787 372.156 618.187V417.339C372.149 409.083 374.827 401.048 379.786 394.447L393.457 376.172ZM450.496 514.247C451.466 514.279 452.43 514.086 453.313 513.682C454.196 513.278 454.973 512.675 455.583 511.919L473.387 489.422C477.203 483.992 482.29 481.283 489.678 481.283H542.037L554.449 455.682L542.037 430.464H441.186V510.368C441.164 510.88 441.25 511.392 441.438 511.869C441.625 512.346 441.912 512.779 442.277 513.138C442.643 513.498 443.08 513.777 443.56 513.957C444.041 514.137 444.553 514.214 445.065 514.183L450.496 514.247Z" fill="white"/>
+            <path d="M675.38 377.304C676.915 374.504 679.175 372.169 681.922 370.542C684.67 368.916 687.804 368.058 690.997 368.059H842.298C849.674 368.059 854.71 371.162 858.208 377.368L897.378 446.411C899.091 449.142 900 452.3 900 455.524C900 458.747 899.091 461.905 897.378 464.636L852.777 543.764L891.947 615.517C897.034 624.826 891.947 631.808 881.086 631.808H841.522C834.159 631.808 827.953 629.48 824.074 622.905L781.406 543.777H715.084C714.578 543.777 714.077 543.878 713.609 544.073C713.142 544.269 712.719 544.556 712.364 544.917C712.009 545.278 711.729 545.706 711.541 546.176C711.353 546.646 711.261 547.149 711.269 547.656V618.251C711.266 621.851 709.833 625.302 707.286 627.847C704.74 630.391 701.287 631.82 697.687 631.82H655.795C652.196 631.82 648.745 630.391 646.2 627.846C643.655 625.301 642.226 621.85 642.226 618.251V447.836C642.224 441.426 643.838 435.119 646.918 429.497L675.38 377.304ZM811.992 481.321L824.404 455.721L811.992 430.502H711.155V510.406C711.133 510.913 711.217 511.419 711.401 511.891C711.585 512.364 711.865 512.793 712.224 513.152C712.583 513.511 713.012 513.791 713.485 513.975C713.957 514.159 714.463 514.243 714.97 514.221H720.4C721.371 514.256 722.336 514.063 723.219 513.659C724.102 513.255 724.879 512.651 725.487 511.894L743.292 489.397C747.107 483.966 752.194 481.257 759.583 481.257L811.992 481.321Z" fill="white"/>
+          </svg>
+          <div class="kpr-sub">Collection Gallery</div>
         </div>
-        <div style="position:relative;overflow:hidden;border:1px solid var(--gray3);border-radius:6px;background:var(--gray1);min-height:300px">
-          <div id="slide-track" style="display:flex;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)"></div>
-          <div id="slide-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gray5);font-size:12px;letter-spacing:0.06em">Loading posts…</div>
+
+        <h1 style="font-size:26px;font-weight:600;color:var(--white);margin-bottom:10px;letter-spacing:-0.02em;line-height:1.2">Your collection,<br><span style="color:var(--purple)">your grid.</span></h1>
+        <p style="font-size:13px;color:var(--gray6);line-height:1.7;margin-bottom:2.5rem;font-weight:300">Paste any wallet address to see every KPRVERSE NFT it holds — pick your favourites and export a shareable grid.</p>
+        <div class="field">
+          <label for="wallet-in">Wallet address or ENS name</label>
+          <input type="text" id="wallet-in" placeholder="0x… or yourname.eth" autocomplete="off" spellcheck="false" />
         </div>
-        <div id="slide-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px"></div>
+        <button class="btn-primary" id="go-btn" onclick="buildGrid()">Build my grid</button>
+        <div id="err" class="error-msg"></div>
+        <p class="setup-note">Works with any Ethereum wallet. Only KPRVERSE NFTs are shown.</p>
+
+        <div id="community-feed" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--gray3)">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray5);margin-bottom:4px">Community</div>
+              <div style="font-size:15px;font-weight:600;color:var(--white);letter-spacing:-0.01em">#KPRVERSE</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <button onclick="slidePrev()" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:14px;font-family:'IBM Plex Mono',monospace">←</button>
+              <span id="slide-counter" style="font-size:10px;letter-spacing:0.08em;color:var(--gray5);min-width:32px;text-align:center">1 / 5</span>
+              <button onclick="slideNext()" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:14px;font-family:'IBM Plex Mono',monospace">→</button>
+              <button onclick="toggleAuto()" id="auto-btn" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:11px;font-family:'IBM Plex Mono',monospace">▶</button>
+            </div>
+          </div>
+          <div style="position:relative;overflow:hidden;border:1px solid var(--gray3);border-radius:6px;background:var(--gray1);min-height:300px">
+            <div id="slide-track" style="display:flex;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)"></div>
+            <div id="slide-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gray5);font-size:12px;letter-spacing:0.06em">Loading posts…</div>
+          </div>
+          <div id="slide-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px"></div>
+        </div>
+
+      </div>
+
+      <!-- Right symbol -->
+      <div style="flex:1;display:flex;align-items:center;justify-content:flex-start;padding-left:3rem;opacity:0.12;pointer-events:none;user-select:none" aria-hidden="true">
+        <svg viewBox="0 0 1000 1000" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:min(220px,18vw);height:auto">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M429.293 652.138C429.293 659.007 434.861 664.575 441.73 664.575H463.752C470.621 664.575 476.19 670.144 476.19 677.013V887.562C476.19 894.432 481.758 900 488.627 900H510.649C517.518 900 523.086 894.432 523.086 887.562V677.013C523.086 670.144 528.655 664.575 535.524 664.575H557.546C564.415 664.575 569.983 659.007 569.983 652.138V535.886C569.983 529.017 575.552 523.448 582.421 523.448H699.105C705.974 523.448 711.542 517.88 711.542 511.011V488.989C711.542 482.12 705.974 476.552 699.105 476.552H582.421C575.552 476.552 569.983 470.983 569.983 464.114V347.862C569.983 340.993 564.415 335.425 557.546 335.425H535.524C528.655 335.425 523.086 329.856 523.086 322.987V112.438C523.086 105.568 517.518 100 510.649 100H488.627C481.758 100 476.19 105.568 476.19 112.438V322.987C476.19 329.856 470.621 335.425 463.752 335.425H441.73C434.861 335.425 429.293 340.993 429.293 347.862V464.114C429.293 470.983 423.724 476.552 416.855 476.552H300.438C293.568 476.552 288 482.12 288 488.989V511.011C288 517.88 293.568 523.448 300.438 523.448H416.855C423.724 523.448 429.293 529.017 429.293 535.886V652.138ZM488.626 335.203C481.757 335.203 476.189 340.772 476.189 347.641V464.114C476.189 470.983 470.62 476.552 463.751 476.552H441.729C434.86 476.552 429.292 482.12 429.292 488.989V511.128C429.292 517.997 434.86 523.566 441.729 523.566H463.751C470.62 523.566 476.189 529.134 476.189 536.003V652.36C476.189 659.229 481.757 664.798 488.626 664.798H510.648C517.517 664.798 523.085 659.229 523.085 652.36V535.886C523.085 529.017 528.654 523.449 535.523 523.449H557.544C564.414 523.449 569.982 517.88 569.982 511.011V489.077C569.982 482.208 564.414 476.64 557.544 476.64H535.523C528.654 476.64 523.085 471.071 523.085 464.202V347.641C523.085 340.772 517.517 335.203 510.648 335.203H488.626Z" fill="white"/>
+        </svg>
       </div>
 
     </div>
   </div>
-
-<script>
-const POSTS = [
-  "https://x.com/NFTSurfer33/status/2068811880131407887",
-  "https://x.com/0xTaxMan/status/2069083428188754125",
-  "https://x.com/QuinnHillerich/status/2069112505431990494",
-  "https://x.com/Zi99yS/status/2069164854532042904",
-  "https://x.com/bullmktrich/status/2068747263241822660",
-];
-
-let currentSlide = 0;
-let autoTimer = null;
-let isAuto = false;
-
-async function initSlideshow() {
-  if (!POSTS.length) return;
-  const track = document.getElementById('slide-track');
-  const loading = document.getElementById('slide-loading');
-  const dots = document.getElementById('slide-dots');
-
-  if (!window.twttr) {
-    await new Promise(resolve => {
-      const s = document.createElement('script');
-      s.src = 'https://platform.twitter.com/widgets.js';
-      s.onload = resolve;
-      document.head.appendChild(s);
-    });
-  }
-
-  track.innerHTML = '';
-  dots.innerHTML = '';
-
-  for (let i = 0; i < POSTS.length; i++) {
-    const slide = document.createElement('div');
-    slide.style.cssText = 'min-width:100%;padding:1.5rem;display:flex;justify-content:center;align-items:flex-start;box-sizing:border-box';
-    const inner = document.createElement('div');
-    inner.style.cssText = 'width:100%;max-width:500px';
-    slide.appendChild(inner);
-    track.appendChild(slide);
-
-    const dot = document.createElement('button');
-    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;border:none;cursor:pointer;transition:background 0.2s,transform 0.2s;padding:0;background:var(--gray4)';
-    dot.onclick = (idx => () => goToSlide(idx))(i);
-    dots.appendChild(dot);
-
-    try {
-      const tweetId = POSTS[i].split('/status/')[1].split('?')[0];
-      await window.twttr.widgets.createTweet(tweetId, inner, {
-        theme: 'dark', dnt: true, conversation: 'none', cards: 'visible', align: 'center', width: 500
-      });
-    } catch(e) {
-      inner.innerHTML = '<div style="padding:1rem;color:var(--gray5);font-size:12px;text-align:center">Could not load post.<br><a href="' + POSTS[i] + '" target="_blank" rel="noopener" style="color:var(--purple)">View on X →</a></div>';
-    }
-  }
-
-  loading.style.display = 'none';
-  updateSlideUI();
-}
-
-function goToSlide(n) { currentSlide = Math.max(0, Math.min(n, POSTS.length-1)); updateSlideUI(); }
-function slideNext() { currentSlide = (currentSlide+1) % POSTS.length; updateSlideUI(); }
-function slidePrev() { currentSlide = (currentSlide-1+POSTS.length) % POSTS.length; updateSlideUI(); }
-
-function updateSlideUI() {
-  const track = document.getElementById('slide-track');
-  const counter = document.getElementById('slide-counter');
-  const dots = document.getElementById('slide-dots');
-  if (track) track.style.transform = 'translateX(-'+(currentSlide*100)+'%)';
-  if (counter) counter.textContent = (currentSlide+1)+' / '+POSTS.length;
-  if (dots) Array.from(dots.children).forEach((dot,i) => {
-    dot.style.background = i===currentSlide ? 'var(--purple)' : 'var(--gray4)';
-    dot.style.transform = i===currentSlide ? 'scale(1.3)' : 'scale(1)';
-  });
-}
-
-function toggleAuto() {
-  const btn = document.getElementById('auto-btn');
-  if (isAuto) {
-    clearInterval(autoTimer); isAuto = false;
-    btn.textContent = '▶'; btn.style.borderColor = 'var(--gray3)'; btn.style.color = 'var(--gray5)';
-  } else {
-    autoTimer = setInterval(slideNext, 5000); isAuto = true;
-    btn.textContent = '⏸'; btn.style.borderColor = 'var(--purple)'; btn.style.color = 'var(--purple)';
-  }
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initSlideshow);
-} else {
-  initSlideshow();
-}
-</script>
 
   <div id="gallery">
     <div class="gallery-header">
@@ -414,6 +336,96 @@ if (document.readyState === 'loading') {
 </div>
 
 <script>
+const POSTS = [
+  "https://x.com/NFTSurfer33/status/2068811880131407887",
+  "https://x.com/0xTaxMan/status/2069083428188754125",
+  "https://x.com/QuinnHillerich/status/2069112505431990494",
+  "https://x.com/Zi99yS/status/2069164854532042904",
+  "https://x.com/bullmktrich/status/2068747263241822660",
+];
+
+let currentSlide = 0;
+let autoTimer = null;
+let isAuto = false;
+
+async function initSlideshow() {
+  if (!POSTS.length) return;
+  const track = document.getElementById('slide-track');
+  const loading = document.getElementById('slide-loading');
+  const dots = document.getElementById('slide-dots');
+
+  if (!window.twttr) {
+    await new Promise(resolve => {
+      const s = document.createElement('script');
+      s.src = 'https://platform.twitter.com/widgets.js';
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+  }
+
+  track.innerHTML = '';
+  dots.innerHTML = '';
+
+  for (let i = 0; i < POSTS.length; i++) {
+    const slide = document.createElement('div');
+    slide.style.cssText = 'min-width:100%;padding:1.5rem;display:flex;justify-content:center;align-items:flex-start;box-sizing:border-box';
+    const inner = document.createElement('div');
+    inner.style.cssText = 'width:100%;max-width:500px';
+    slide.appendChild(inner);
+    track.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;border:none;cursor:pointer;transition:background 0.2s,transform 0.2s;padding:0;background:var(--gray4)';
+    dot.onclick = (idx => () => goToSlide(idx))(i);
+    dots.appendChild(dot);
+
+    try {
+      const tweetId = POSTS[i].split('/status/')[1].split('?')[0];
+      await window.twttr.widgets.createTweet(tweetId, inner, {
+        theme: 'dark', dnt: true, conversation: 'none', cards: 'visible', align: 'center', width: 500
+      });
+    } catch(e) {
+      inner.innerHTML = '<div style="padding:1rem;color:var(--gray5);font-size:12px;text-align:center">Could not load post.<br><a href="' + POSTS[i] + '" target="_blank" rel="noopener" style="color:var(--purple)">View on X →</a></div>';
+    }
+  }
+
+  loading.style.display = 'none';
+  updateSlideUI();
+}
+
+function goToSlide(n) { currentSlide = Math.max(0, Math.min(n, POSTS.length-1)); updateSlideUI(); }
+function slideNext() { currentSlide = (currentSlide+1) % POSTS.length; updateSlideUI(); }
+function slidePrev() { currentSlide = (currentSlide-1+POSTS.length) % POSTS.length; updateSlideUI(); }
+
+function updateSlideUI() {
+  const track = document.getElementById('slide-track');
+  const counter = document.getElementById('slide-counter');
+  const dots = document.getElementById('slide-dots');
+  if (track) track.style.transform = 'translateX(-'+(currentSlide*100)+'%)';
+  if (counter) counter.textContent = (currentSlide+1)+' / '+POSTS.length;
+  if (dots) Array.from(dots.children).forEach((dot,i) => {
+    dot.style.background = i===currentSlide ? 'var(--purple)' : 'var(--gray4)';
+    dot.style.transform = i===currentSlide ? 'scale(1.3)' : 'scale(1)';
+  });
+}
+
+function toggleAuto() {
+  const btn = document.getElementById('auto-btn');
+  if (isAuto) {
+    clearInterval(autoTimer); isAuto = false;
+    btn.textContent = '▶'; btn.style.borderColor = 'var(--gray3)'; btn.style.color = 'var(--gray5)';
+  } else {
+    autoTimer = setInterval(slideNext, 5000); isAuto = true;
+    btn.textContent = '⏸'; btn.style.borderColor = 'var(--purple)'; btn.style.color = 'var(--purple)';
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSlideshow);
+} else {
+  initSlideshow();
+}
+
 let allNFTs = [], filteredNFTs = [], nextCursor = null, wallet = '';
 let mode = 'browse', selectedIds = [], exportGridSize = 2, exportFormat = 'png';
 
@@ -452,8 +464,7 @@ function updateStats() {
   allNFTs.forEach(n => (n.traits||[]).forEach(t => { const k = t.trait_type+':'+t.value; tc[k]=(tc[k]||0)+1; }));
   const unique = new Set(allNFTs.flatMap(n=>(n.traits||[]).map(t=>t.trait_type+':'+t.value)));
   document.getElementById('s-traits').textContent = unique.size;
-  document.getElementById('load-more').innerHTML = nextCursor
-    ? '<button onclick="loadMore()">Load more</button>' : '';
+  document.getElementById('load-more').innerHTML = nextCursor ? '<button onclick="loadMore()">Load more</button>' : '';
 }
 
 async function loadMore() {
