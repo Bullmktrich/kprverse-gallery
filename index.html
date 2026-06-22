@@ -189,15 +189,121 @@
       <button class="btn-primary" id="go-btn" onclick="buildGrid()">Build my grid</button>
       <div id="err" class="error-msg"></div>
       <p class="setup-note">Works with any Ethereum wallet. Only KPRVERSE NFTs are shown.</p>
-     const POSTS = [
-  "https://x.com/NFTSurfer33/status/2068811880131407887?s=20",
-  "https://x.com/0xTaxMan/status/2069083428188754125?s=20",
-  "https://x.com/QuinnHillerich/status/2069112505431990494?s=20",
-  "https://x.com/Zi99yS/status/2069164854532042904?s=20",
-  "https://x.com/bullmktrich/status/2068747263241822660?s=20",
-];
+
+      <div id="community-feed" style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--gray3)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray5);margin-bottom:4px">Community</div>
+            <div style="font-size:15px;font-weight:600;color:var(--white);letter-spacing:-0.01em">#KPRVERSE</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button onclick="slidePrev()" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:14px;font-family:'IBM Plex Mono',monospace">←</button>
+            <span id="slide-counter" style="font-size:10px;letter-spacing:0.08em;color:var(--gray5);min-width:32px;text-align:center">1 / 5</span>
+            <button onclick="slideNext()" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:14px;font-family:'IBM Plex Mono',monospace">→</button>
+            <button onclick="toggleAuto()" id="auto-btn" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1px solid var(--gray3);border-radius:4px;background:transparent;color:var(--gray5);cursor:pointer;font-size:11px;font-family:'IBM Plex Mono',monospace">▶</button>
+          </div>
+        </div>
+        <div style="position:relative;overflow:hidden;border:1px solid var(--gray3);border-radius:6px;background:var(--gray1);min-height:300px">
+          <div id="slide-track" style="display:flex;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1)"></div>
+          <div id="slide-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gray5);font-size:12px;letter-spacing:0.06em">Loading posts…</div>
+        </div>
+        <div id="slide-dots" style="display:flex;justify-content:center;gap:6px;margin-top:12px"></div>
+      </div>
+
     </div>
   </div>
+
+<script>
+const POSTS = [
+  "https://x.com/NFTSurfer33/status/2068811880131407887",
+  "https://x.com/0xTaxMan/status/2069083428188754125",
+  "https://x.com/QuinnHillerich/status/2069112505431990494",
+  "https://x.com/Zi99yS/status/2069164854532042904",
+  "https://x.com/bullmktrich/status/2068747263241822660",
+];
+
+let currentSlide = 0;
+let autoTimer = null;
+let isAuto = false;
+
+async function initSlideshow() {
+  if (!POSTS.length) return;
+  const track = document.getElementById('slide-track');
+  const loading = document.getElementById('slide-loading');
+  const dots = document.getElementById('slide-dots');
+
+  if (!window.twttr) {
+    await new Promise(resolve => {
+      const s = document.createElement('script');
+      s.src = 'https://platform.twitter.com/widgets.js';
+      s.onload = resolve;
+      document.head.appendChild(s);
+    });
+  }
+
+  track.innerHTML = '';
+  dots.innerHTML = '';
+
+  for (let i = 0; i < POSTS.length; i++) {
+    const slide = document.createElement('div');
+    slide.style.cssText = 'min-width:100%;padding:1.5rem;display:flex;justify-content:center;align-items:flex-start;box-sizing:border-box';
+    const inner = document.createElement('div');
+    inner.style.cssText = 'width:100%;max-width:500px';
+    slide.appendChild(inner);
+    track.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.style.cssText = 'width:6px;height:6px;border-radius:50%;border:none;cursor:pointer;transition:background 0.2s,transform 0.2s;padding:0;background:var(--gray4)';
+    dot.onclick = (idx => () => goToSlide(idx))(i);
+    dots.appendChild(dot);
+
+    try {
+      const tweetId = POSTS[i].split('/status/')[1].split('?')[0];
+      await window.twttr.widgets.createTweet(tweetId, inner, {
+        theme: 'dark', dnt: true, conversation: 'none', cards: 'visible', align: 'center', width: 500
+      });
+    } catch(e) {
+      inner.innerHTML = '<div style="padding:1rem;color:var(--gray5);font-size:12px;text-align:center">Could not load post.<br><a href="' + POSTS[i] + '" target="_blank" rel="noopener" style="color:var(--purple)">View on X →</a></div>';
+    }
+  }
+
+  loading.style.display = 'none';
+  updateSlideUI();
+}
+
+function goToSlide(n) { currentSlide = Math.max(0, Math.min(n, POSTS.length-1)); updateSlideUI(); }
+function slideNext() { currentSlide = (currentSlide+1) % POSTS.length; updateSlideUI(); }
+function slidePrev() { currentSlide = (currentSlide-1+POSTS.length) % POSTS.length; updateSlideUI(); }
+
+function updateSlideUI() {
+  const track = document.getElementById('slide-track');
+  const counter = document.getElementById('slide-counter');
+  const dots = document.getElementById('slide-dots');
+  if (track) track.style.transform = 'translateX(-'+(currentSlide*100)+'%)';
+  if (counter) counter.textContent = (currentSlide+1)+' / '+POSTS.length;
+  if (dots) Array.from(dots.children).forEach((dot,i) => {
+    dot.style.background = i===currentSlide ? 'var(--purple)' : 'var(--gray4)';
+    dot.style.transform = i===currentSlide ? 'scale(1.3)' : 'scale(1)';
+  });
+}
+
+function toggleAuto() {
+  const btn = document.getElementById('auto-btn');
+  if (isAuto) {
+    clearInterval(autoTimer); isAuto = false;
+    btn.textContent = '▶'; btn.style.borderColor = 'var(--gray3)'; btn.style.color = 'var(--gray5)';
+  } else {
+    autoTimer = setInterval(slideNext, 5000); isAuto = true;
+    btn.textContent = '⏸'; btn.style.borderColor = 'var(--purple)'; btn.style.color = 'var(--purple)';
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initSlideshow);
+} else {
+  initSlideshow();
+}
+</script>
 
   <div id="gallery">
     <div class="gallery-header">
